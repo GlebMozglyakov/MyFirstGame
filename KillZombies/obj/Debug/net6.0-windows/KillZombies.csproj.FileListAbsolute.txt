@@ -35,3 +35,8 @@ C:\Users\User\Desktop\KillZombies\obj\Debug\net6.0-windows\refint\KillZombies.dl
 C:\Users\User\Desktop\KillZombies\obj\Debug\net6.0-windows\KillZombies.pdb
 C:\Users\User\Desktop\KillZombies\obj\Debug\net6.0-windows\KillZombies.genruntimeconfig.cache
 C:\Users\User\Desktop\KillZombies\obj\Debug\net6.0-windows\ref\KillZombies.dll
+C:\Users\User\Desktop\KillZombies\bin\Debug\net6.0-windows\Content\chel.xnb
+C:\Users\User\Desktop\KillZombies\bin\Debug\net6.0-windows\Content\пуля вертикально.xnb
+C:\Users\User\Desktop\KillZombies\bin\Debug\net6.0-windows\Content\пуля горизонтально.xnb
+C:\Users\User\Desktop\KillZombies\bin\Debug\net6.0-windows\Content\bulletHorizontal.xnb
+C:\Users\User\Desktop\KillZombies\bin\Debug\net6.0-windows\Content\bulletVertical.xnb

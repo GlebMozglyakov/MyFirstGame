@@ -633,6 +633,15 @@
           }
         }
       },
+      "SpriteFontPlus.MonoGame/0.7.0.22": {
+        "type": "package",
+        "compile": {
+          "lib/netstandard2.0/SpriteFontPlus.dll": {}
+        },
+        "runtime": {
+          "lib/netstandard2.0/SpriteFontPlus.dll": {}
+        }
+      },
       "System.AppContext/4.1.0": {
         "type": "package",
         "dependencies": {
@@ -3186,6 +3195,19 @@
         "lib/uap10.0/SharpDX.XInput.xml",
         "sharpdx.xinput.4.0.1.nupkg.sha512",
         "sharpdx.xinput.nuspec"
+      ]
+    },
+    "SpriteFontPlus.MonoGame/0.7.0.22": {
+      "sha512": "RLI504OcKDPINGs2IveCYORuEuf8YxRJ6bIE1suttmrzstKHlkd7k2O6apfuoXICfT81Gqczsgczn2SEeFHFuQ==",
+      "type": "package",
+      "path": "spritefontplus.monogame/0.7.0.22",
+      "files": [
+        ".nupkg.metadata",
+        ".signature.p7s",
+        "lib/net45/SpriteFontPlus.dll",
+        "lib/netstandard2.0/SpriteFontPlus.dll",
+        "spritefontplus.monogame.0.7.0.22.nupkg.sha512",
+        "spritefontplus.monogame.nuspec"
       ]
     },
     "System.AppContext/4.1.0": {
@@ -7528,7 +7550,8 @@
   "projectFileDependencyGroups": {
     "net6.0-windows7.0": [
       "MonoGame.Content.Builder.Task >= 3.8.1.303",
-      "MonoGame.Framework.WindowsDX >= 3.8.1.303"
+      "MonoGame.Framework.WindowsDX >= 3.8.1.303",
+      "SpriteFontPlus.MonoGame >= 0.7.0.22"
     ]
   },
   "packageFolders": {
@@ -7583,6 +7606,10 @@
           "MonoGame.Framework.WindowsDX": {
             "target": "Package",
             "version": "[3.8.1.303, )"
+          },
+          "SpriteFontPlus.MonoGame": {
+            "target": "Package",
+            "version": "[0.7.0.22, )"
           }
         },
         "imports": [
@@ -7604,7 +7631,7 @@
             "privateAssets": "none"
           }
         },
-        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\7.0.202\\RuntimeIdentifierGraph.json"
+        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\7.0.203\\RuntimeIdentifierGraph.json"
       }
     }
   }
