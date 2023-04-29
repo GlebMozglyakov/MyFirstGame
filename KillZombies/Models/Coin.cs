@@ -45,6 +45,22 @@ namespace KillZombies.Models
             }
         }
 
+        private int score = 0;
+        public int Score
+        {
+            get
+            {
+                return score;
+            }
+            set
+            {
+                if (value < 0)
+                    score = 0;
+                else
+                    score = value;
+            }
+        }
+
         public bool IsWasCollected { get; set; } = false;
 
         public Coin(Texture2D texture, Rectangle rectangle)
@@ -65,6 +81,26 @@ namespace KillZombies.Models
         {
             X = position.X;
             Y = position.Y;
+        }
+
+        public void Update(Coin coin, Map map, Player player)
+        {
+            if (coin.IsWasCollected)
+            {
+                coin.SetPosition(Position.ComputePosition(map));
+                coin.IsWasCollected = false;
+            }
+
+            if (player.Rectangle.Intersects(coin.Rectangle))
+            {
+                coin.IsWasCollected = true;
+                Score++;
+            }
+        }
+
+        public void Draw(SpriteBatch spriteBatch, Coin coin)
+        {
+            spriteBatch.Draw(coin.Texture, coin.Rectangle, Color.White);
         }
     }
 }

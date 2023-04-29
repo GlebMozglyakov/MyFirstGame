@@ -68,7 +68,7 @@ namespace KillZombies.Models
             Direction = direction;
         }
 
-        public void Draw(GameTime gameTime, SpriteBatch spriteBatch)
+        public void Draw(SpriteBatch spriteBatch)
         {
             Texture2D texture = null;
 

@@ -22,8 +22,8 @@ namespace KillZombies.Models
         {
             var random = new Random();
 
-            return new Position(random.Next(map.Width.X1, map.Width.X2), 
-                                random.Next(map.Height.X1, map.Height.X2));
+            return new Position(random.Next(map.Width.X1 + 20, map.Width.X2 - 20), 
+                                random.Next(map.Height.X1 + 20, map.Height.X2 - 20));
         }
     }
 }

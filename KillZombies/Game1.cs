@@ -2,8 +2,6 @@
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
-using System.Collections.Generic;
-using System.Linq;
 
 namespace KillZombies
 {
@@ -15,28 +13,8 @@ namespace KillZombies
         Player player;
         Map map;
         Coin coin;
-        int score = 0;
-        int Score
-        {
-            get
-            {
-                return score;
-            }
-            set
-            {
-                if (value < 0)
-                    score = 0;
-                else
-                    score += value;
-            }
-        }
-
-        List<Bullet> bullets = new List<Bullet>();
-        Texture2D bulletVerticalTexture;
-        Texture2D bulletHorizontalTexture;
-
-        KeyboardState currentKS;
-        KeyboardState previousKS;
+        SpriteFont mainFont;
+        Weapon weapon;
 
         public Game1()
         {
@@ -62,45 +40,23 @@ namespace KillZombies
         {
             _spriteBatch = new SpriteBatch(GraphicsDevice);
 
-            player = new Player(Content.Load<Texture2D>("chel"), new Rectangle(0, 0, 50, 50));
-            bulletHorizontalTexture = Content.Load<Texture2D>("bulletHorizontal");
-            bulletVerticalTexture = Content.Load<Texture2D>("bulletVertical");
-            coin = new Coin(Content.Load<Texture2D>("coin"), new Rectangle(0, 0, 27, 27), Position.ComputePosition(map));
-
             // TODO: use this.Content to load your game content here
+            player = new Player(Content.Load<Texture2D>("chel"), new Rectangle(0, 0, 90, 190));
+            coin = new Coin(Content.Load<Texture2D>("coin"), new Rectangle(0, 0, 27, 27), Position.ComputePosition(map));
+            mainFont = Content.Load<SpriteFont>("myfont");
+            weapon = new Weapon(Content);
         }
 
         protected override void Update(GameTime gameTime)
         {
-            currentKS = Keyboard.GetState();
-
             if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
                 Exit();
 
             // TODO: Add your update logic here
             player.Move(map);
-
-            if (coin.IsWasCollected)
-            {
-                coin.SetPosition(Position.ComputePosition(map));
-            }
-
-            if (player.Rectangle.Intersects(coin.Rectangle))
-            {
-                coin.IsWasCollected = true;
-                Score++;
-            }
-
-            if (currentKS.IsKeyDown(Keys.Space) && previousKS.IsKeyUp(Keys.Space))
-                bullets.Add(new Bullet(bulletHorizontalTexture, bulletVerticalTexture, new Rectangle((int)player.CurrentPosition.X + 100, (int)player.CurrentPosition.Y + 70, 25, 25), player.Direction));
-
-            foreach (Bullet bullet in bullets.Reverse<Bullet>())
-            {
-                if (bullet.IsOutOfScreen(map))
-                    bullets.Remove(bullet);
-            }
-
-            previousKS = currentKS;
+            coin.Update(coin, map, player);
+            weapon.Create(player);
+            weapon.DeleteBullets(map);
 
             base.Update(gameTime);
         }
@@ -112,10 +68,10 @@ namespace KillZombies
             // TODO: Add your drawing code here
             _spriteBatch.Begin();
 
-            player.Draw(gameTime, _spriteBatch);
-
-            foreach (var bullet in bullets)
-                bullet.Draw(gameTime, _spriteBatch);
+            _spriteBatch.DrawString(mainFont, $"Coins: {coin.Score}", new Vector2(10, 7), Color.White);
+            player.Draw(_spriteBatch);
+            coin.Draw(_spriteBatch, coin);
+            weapon.Draw(_spriteBatch);
 
             _spriteBatch.End();
 

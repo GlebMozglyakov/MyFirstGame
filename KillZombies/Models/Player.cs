@@ -64,10 +64,9 @@ namespace KillZombies.Models
         {
             Texture = texture;
             this.rectangle = rectangle;
-            CurrentPosition = new Vector2(130, 130);
         }
 
-        public void Draw(GameTime gameTime, SpriteBatch spriteBatch)
+        public void Draw(SpriteBatch spriteBatch)
         {
             switch (Direction)
             {
@@ -91,21 +90,25 @@ namespace KillZombies.Models
             {
                 CurrentPosition = new Vector2(CurrentPosition.X - speed, CurrentPosition.Y);
                 Direction = MoveDirection.Left;
+                X -= speed;
             }
             if (keyboardState.IsKeyDown(Keys.Right) && CurrentPosition.X < map.Width.X2 - 80)
             {
                 CurrentPosition = new Vector2(CurrentPosition.X + speed, CurrentPosition.Y);
                 Direction = MoveDirection.Right;
+                X += speed;
             }
             if (keyboardState.IsKeyDown(Keys.Up) && CurrentPosition.Y > map.Height.X1)
             {
                 CurrentPosition = new Vector2(CurrentPosition.X, CurrentPosition.Y - speed);
                 Direction = MoveDirection.Up;
+                Y -= speed;
             }
             if (keyboardState.IsKeyDown(Keys.Down) && CurrentPosition.Y < map.Height.X2 - 155)
             {
                 CurrentPosition = new Vector2(CurrentPosition.X, CurrentPosition.Y + speed);
                 Direction = MoveDirection.Down;
+                Y += speed;
             }
         }
     }
