@@ -11,10 +11,11 @@ namespace KillZombies
         private SpriteBatch _spriteBatch;
 
         Player player;
-        Map map;
+        Borders map;
         Coin coin;
         SpriteFont mainFont;
         Weapon weapon;
+        Map world;
 
         public Game1()
         {
@@ -25,7 +26,7 @@ namespace KillZombies
             _graphics.PreferredBackBufferHeight = (int)(GraphicsAdapter.DefaultAdapter.CurrentDisplayMode.Height * 0.915);
             _graphics.PreferredBackBufferWidth = (int)(GraphicsAdapter.DefaultAdapter.CurrentDisplayMode.Width);
 
-            map = new Map(new Line(10, _graphics.PreferredBackBufferWidth - 10)
+            map = new Borders(new Line(10, _graphics.PreferredBackBufferWidth - 10)
                 , new Line(10, _graphics.PreferredBackBufferHeight - 10));
         }
 
@@ -41,10 +42,11 @@ namespace KillZombies
             _spriteBatch = new SpriteBatch(GraphicsDevice);
 
             // TODO: use this.Content to load your game content here
-            player = new Player(Content.Load<Texture2D>("chel"), new Rectangle(0, 0, 90, 190));
+            player = new Player(Content.Load<Texture2D>("chel"), new Rectangle(0, 0, 70, 145));
             coin = new Coin(Content.Load<Texture2D>("coin"), new Rectangle(0, 0, 27, 27), Position.ComputePosition(map));
             mainFont = Content.Load<SpriteFont>("myfont");
             weapon = new Weapon(Content);
+            world = new Map(Level1.CreateWorld(), Content);
         }
 
         protected override void Update(GameTime gameTime)
@@ -53,22 +55,25 @@ namespace KillZombies
                 Exit();
 
             // TODO: Add your update logic here
-            player.Move(map);
+            player.Move(map, world);
             coin.Update(coin, map, player);
-            weapon.Create(player);
+            weapon.Create(player, coin);
             weapon.DeleteBullets(map);
 
             base.Update(gameTime);
         }
 
-        protected override void Draw(GameTime gameTime)
+        protected override void Draw(GameTime gameTime) 
         {
             GraphicsDevice.Clear(Color.CornflowerBlue);
 
             // TODO: Add your drawing code here
             _spriteBatch.Begin();
 
-            _spriteBatch.DrawString(mainFont, $"Coins: {coin.Score}", new Vector2(10, 7), Color.White);
+            foreach (var tile in world.CreateWorld())
+                tile.Draw(_spriteBatch);
+
+            _spriteBatch.DrawString(mainFont, $"Coins: {coin.Score} | Cage: {weapon.cage}", new Vector2(10, 7), Color.White);
             player.Draw(_spriteBatch);
             coin.Draw(_spriteBatch, coin);
             weapon.Draw(_spriteBatch);

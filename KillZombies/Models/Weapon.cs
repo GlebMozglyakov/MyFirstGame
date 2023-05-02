@@ -19,18 +19,40 @@ namespace KillZombies.Models
 
         private Texture2D bulletVerticalTexture;
 
+        public int cage = 10;
+        bool CageIsEnable
+        {
+            get
+            {
+                if (cage > 0)
+                    return true;
+                return false;
+            }
+        }
+
         public Weapon(ContentManager Content)
         {
             bulletHorizontalTexture = Content.Load<Texture2D>("bulletHorizontal");
             bulletVerticalTexture = Content.Load<Texture2D>("bulletVertical");
         }
 
-        public void Create(Player player)
+        public void Create(Player player, Coin coin)
         {
             currentKS = Keyboard.GetState();
 
-            if (currentKS.IsKeyDown(Keys.Space) && previousKS.IsKeyUp(Keys.Space))
-                bullets.Add(new Bullet(bulletHorizontalTexture, bulletVerticalTexture, new Rectangle((int)player.CurrentPosition.X + 100, (int)player.CurrentPosition.Y + 70, 25, 25), player.Direction));
+            if (currentKS.IsKeyDown(Keys.Space) && previousKS.IsKeyUp(Keys.Space) && CageIsEnable)
+            {
+                bullets.Add(new Bullet(bulletHorizontalTexture, bulletVerticalTexture, new Rectangle((int)player.CurrentPosition.X + 75, (int)player.CurrentPosition.Y + 55, 25, 25), player.Direction));
+
+                cage--;
+            }
+
+            if (currentKS.IsKeyDown(Keys.Tab) && previousKS.IsKeyUp(Keys.Tab) && coin.Score >= 5)
+            {
+                cage += 10;
+
+                coin.Score -= 5;
+            }
 
             previousKS = currentKS;
         }
@@ -41,7 +63,7 @@ namespace KillZombies.Models
                 bullet.Draw(spriteBatch);
         }
 
-        public void DeleteBullets(Map map)
+        public void DeleteBullets(Borders map)
         {
             foreach (Bullet bullet in bullets.Reverse<Bullet>())
             {

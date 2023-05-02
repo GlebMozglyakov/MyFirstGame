@@ -14,7 +14,7 @@ namespace KillZombies.Models
 
         public int Armor { get; set; }
 
-        private int speed = 20;
+        private int speed = 10;
 
         private SpriteEffects effect;
 
@@ -79,12 +79,12 @@ namespace KillZombies.Models
                     break;
             }
 
-            //spriteBatch.Draw(Texture, CurrentPosition, Color.White);
-            spriteBatch.Draw(Texture, CurrentPosition, null, Color.White, 0, Vector2.Zero, 0.2f, effect, 0);
+            spriteBatch.Draw(Texture, CurrentPosition, null, Color.White, 0, Vector2.Zero, 0.15f, effect, 0);
         }
-        public void Move(Map map)
+        public void Move(Borders map, Map world)
         {
             var keyboardState = Keyboard.GetState();
+            var worldMap = world.World;
 
             if (keyboardState.IsKeyDown(Keys.Left) && CurrentPosition.X > map.Width.X1 - 10)
             {

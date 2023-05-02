@@ -18,7 +18,7 @@ namespace KillZombies.Models
             Y = y;
         }
 
-        public static Position ComputePosition(Map map)
+        public static Position ComputePosition(Borders map)
         {
             var random = new Random();
 

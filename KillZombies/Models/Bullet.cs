@@ -102,7 +102,7 @@ namespace KillZombies.Models
             spriteBatch.Draw(texture, Rectangle, null, Color.White, 0f, new Vector2(texture.Width / 2, texture.Height / 2), effect, 0f);
         }
 
-        public bool IsOutOfScreen(Map map)
+        public bool IsOutOfScreen(Borders map)
         {
             if (X > map.Width.X2 || X < map.Width.X1 || Y > map.Height.X2 || Y < map.Height.X1 || Intersected)
                 return true;
