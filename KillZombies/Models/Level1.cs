@@ -1,8 +1,45 @@
-﻿namespace KillZombies.Models
+﻿using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Content;
+using Microsoft.Xna.Framework.Graphics;
+
+namespace KillZombies.Models
 {
-    class Level1
+    class Level1 : ILevel
     {
-        private static int[,] map = new[,] 
+        public Zombie[] Zombies;
+
+        private static SpriteBatch spriteBatch;
+
+        private Point[] spawnPositions;
+
+        private Borders borders;
+
+        public Level1(ContentManager Content, SpriteBatch _spriteBatch, Borders borders, Player player)
+        {
+            Zombies = new Zombie[5];
+            spriteBatch = _spriteBatch;
+            this.borders = borders;
+            spawnPositions = new Point[5] { new Point(100, 100), new Point(400, 800), new Point(900, 500), new Point(900, 500), new Point(900, 400) };
+            InitializeZombies(Content, player);
+        }
+
+        private void InitializeZombies(ContentManager Content, Player player)
+        {
+            for (int i = 0; i < 5; i++)
+            {
+                var position = spawnPositions[i];
+                //var position = Position.ComputePosition(borders, CreateWorld());
+                Zombies[i] = new Zombie(Content, new Rectangle(position.X, position.Y, 70, 140), i % 3, map, player);
+            }
+        }
+
+        public void SpawnZombies()
+        {
+            for (int i = 0;i < 5; i++)
+                Zombies[i].Draw(spriteBatch);
+        }
+
+        public static int[,] map = new[,] 
         { 
             { 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,  1, 1, 1, 1, 1, 1, 1, 1, 1, 1,  1, 1, 1, 1, 1, 1, 1, 1, 1, 1,  1, 1, 1, 1, 1, 1, 1, 1, 1, 1,  1, 1, 1, 1, 1, 1, 1, 1, 1, 1,  1, 1, 1, 1, 1, 1, 1, 1, 1, 1,},
             { 1, 0, 0, 0, 0, 0, 0, 0, 0, 0,  0, 0, 0, 0, 0, 0, 0, 0, 0, 0,  0, 0, 0, 0, 0, 0, 0, 0, 0, 0,  0, 0, 0, 0, 0, 0, 0, 0, 0, 0,  0, 0, 0, 0, 0, 0, 0, 0, 0, 0,  0, 0, 0, 0, 0, 0, 0, 0, 0, 1,},

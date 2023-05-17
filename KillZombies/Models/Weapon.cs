@@ -42,7 +42,7 @@ namespace KillZombies.Models
 
             if (currentKS.IsKeyDown(Keys.Space) && previousKS.IsKeyUp(Keys.Space) && CageIsEnable)
             {
-                bullets.Add(new Bullet(bulletHorizontalTexture, bulletVerticalTexture, new Rectangle((int)player.CurrentPosition.X + 75, (int)player.CurrentPosition.Y + 55, 25, 25), player.Direction));
+                bullets.Add(new Bullet(bulletHorizontalTexture, bulletVerticalTexture, new Rectangle(player.X + 75, player.Y + 55, 25, 25), player.Direction));
 
                 cage--;
             }

@@ -17,6 +17,8 @@ namespace KillZombies.Models
 
         private static Texture2D greyTexture;
 
+        private static Texture2D redTexture;
+
         public readonly MapCell[,] World;
 
         static List<Tile> tiels;
@@ -32,6 +34,7 @@ namespace KillZombies.Models
             green1Texture = Content.Load<Texture2D>("green1");
             green2Texture = Content.Load<Texture2D>("green2");
             greyTexture = Content.Load<Texture2D>("grey");
+            redTexture = Content.Load<Texture2D>("red");
         }
 
         public Map(MapCell[,] world, ContentManager Content)

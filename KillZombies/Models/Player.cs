@@ -1,8 +1,6 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
-using SharpDX.Direct3D9;
-using static System.Windows.Forms.VisualStyles.VisualStyleElement;
 
 namespace KillZombies.Models
 {
@@ -18,7 +16,7 @@ namespace KillZombies.Models
 
         private SpriteEffects effect;
 
-        public Vector2 CurrentPosition { get; set; }
+        //public Vector2 CurrentPosition { get; set; }
 
         public MoveDirection Direction { get; set; }
 
@@ -64,6 +62,7 @@ namespace KillZombies.Models
         {
             Texture = texture;
             this.rectangle = rectangle;
+            //CurrentPosition = new Vector2(X, Y);
         }
 
         public void Draw(SpriteBatch spriteBatch)
@@ -79,34 +78,42 @@ namespace KillZombies.Models
                     break;
             }
 
-            spriteBatch.Draw(Texture, CurrentPosition, null, Color.White, 0, Vector2.Zero, 0.15f, effect, 0);
+            spriteBatch.Draw(Texture, new Vector2(X, Y), null, Color.White, 0, Vector2.Zero, 0.15f, effect, 0);
         }
         public void Move(Borders map, Map world)
         {
             var keyboardState = Keyboard.GetState();
             var worldMap = world.World;
 
-            if (keyboardState.IsKeyDown(Keys.Left) && CurrentPosition.X > map.Width.X1 - 10)
+            if (keyboardState.IsKeyDown(Keys.Left) && X > map.Width.X1 - 10 
+                && world.World[(Y)/ 32, (X + 30 - speed) / 32] == MapCell.Green1 
+                && world.World[(Y + 115) / 32, (X + 30 - speed) / 32] == MapCell.Green1)
             {
-                CurrentPosition = new Vector2(CurrentPosition.X - speed, CurrentPosition.Y);
+                //CurrentPosition = new Vector2(CurrentPosition.X - speed, CurrentPosition.Y);
                 Direction = MoveDirection.Left;
                 X -= speed;
             }
-            if (keyboardState.IsKeyDown(Keys.Right) && CurrentPosition.X < map.Width.X2 - 80)
+            if (keyboardState.IsKeyDown(Keys.Right) && X < map.Width.X2 - 80  
+                && world.World[(Y)/ 32, (X + 30 + speed) / 32] == MapCell.Green1 
+                && world.World[(Y + 115) / 32, (X + 30 + speed) / 32] == MapCell.Green1)
             {
-                CurrentPosition = new Vector2(CurrentPosition.X + speed, CurrentPosition.Y);
+                //CurrentPosition = new Vector2(CurrentPosition.X + speed, CurrentPosition.Y);
                 Direction = MoveDirection.Right;
                 X += speed;
             }
-            if (keyboardState.IsKeyDown(Keys.Up) && CurrentPosition.Y > map.Height.X1)
+            if (keyboardState.IsKeyDown(Keys.Up) && Y > map.Height.X1 
+                && world.World[(Y - speed) / 32, (X + 30)/ 32] == MapCell.Green1 
+                && world.World[(Y - speed) / 32, (X + 40 + 30) / 32] == MapCell.Green1)
             {
-                CurrentPosition = new Vector2(CurrentPosition.X, CurrentPosition.Y - speed);
+                //CurrentPosition = new Vector2(CurrentPosition.X, CurrentPosition.Y - speed);
                 Direction = MoveDirection.Up;
                 Y -= speed;
             }
-            if (keyboardState.IsKeyDown(Keys.Down) && CurrentPosition.Y < map.Height.X2 - 155)
+            if (keyboardState.IsKeyDown(Keys.Down) && Y < map.Height.X2 - 155 
+                && world.World[(Y + 120 + speed) / 32, (X + 30) / 32] == MapCell.Green1 
+                && world.World[(Y + 120 + speed) / 32, (X + 58) / 32] == MapCell.Green1)
             {
-                CurrentPosition = new Vector2(CurrentPosition.X, CurrentPosition.Y + speed);
+                //CurrentPosition = new Vector2(CurrentPosition.X, CurrentPosition.Y + speed);
                 Direction = MoveDirection.Down;
                 Y += speed;
             }

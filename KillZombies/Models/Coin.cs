@@ -83,11 +83,11 @@ namespace KillZombies.Models
             Y = position.Y;
         }
 
-        public void Update(Coin coin, Borders map, Player player)
+        public void Update(Coin coin, Borders map, Player player, MapCell[,] world)
         {
             if (coin.IsWasCollected)
             {
-                coin.SetPosition(Position.ComputePosition(map));
+                coin.SetPosition(Position.ComputePosition(map, world));
                 coin.IsWasCollected = false;
             }
 

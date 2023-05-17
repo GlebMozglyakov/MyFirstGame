@@ -6,6 +6,7 @@
         Brick,
         Box,
         Green2,
-        Grey
+        Grey,
+        Red
     }
 }
