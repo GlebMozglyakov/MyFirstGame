@@ -17,6 +17,8 @@ namespace KillZombies
         Weapon weapon;
         Map world;
 
+        Level1 level1;
+
         public Game1()
         {
             _graphics = new GraphicsDeviceManager(this);
@@ -42,11 +44,13 @@ namespace KillZombies
             _spriteBatch = new SpriteBatch(GraphicsDevice);
 
             // TODO: use this.Content to load your game content here
-            player = new Player(Content.Load<Texture2D>("chel"), new Rectangle(0, 0, 70, 145));
-            coin = new Coin(Content.Load<Texture2D>("coin"), new Rectangle(0, 0, 27, 27), Position.ComputePosition(map));
+            world = new Map(Level1.CreateWorld(), Content);
+            player = new Player(Content.Load<Texture2D>("chel"), new Rectangle(800, 600, 70, 140));
+            coin = new Coin(Content.Load<Texture2D>("coin"), new Rectangle(0, 0, 27, 27), Position.ComputePosition(map, world.World));
             mainFont = Content.Load<SpriteFont>("myfont");
             weapon = new Weapon(Content);
-            world = new Map(Level1.CreateWorld(), Content);
+
+            level1 = new Level1(Content, _spriteBatch, map, player);
         }
 
         protected override void Update(GameTime gameTime)
@@ -56,9 +60,20 @@ namespace KillZombies
 
             // TODO: Add your update logic here
             player.Move(map, world);
-            coin.Update(coin, map, player);
+            coin.Update(coin, map, player, world.World);
             weapon.Create(player, coin);
             weapon.DeleteBullets(map);
+
+            for (int i = 0; i < 5; i++)
+            {
+                var path = level1.Zombies[i].GetPath(player, Level1.map);
+                foreach (var point in path)
+                {
+                    level1.Zombies[i].X = point.X;
+                    level1.Zombies[i].Y = point.Y;
+                }
+            }
+
 
             base.Update(gameTime);
         }
@@ -77,6 +92,8 @@ namespace KillZombies
             player.Draw(_spriteBatch);
             coin.Draw(_spriteBatch, coin);
             weapon.Draw(_spriteBatch);
+
+            level1.SpawnZombies();
 
             _spriteBatch.End();
 
