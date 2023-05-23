@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<SourceFileCollection xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+  <Profile>Reach</Profile>
+  <Platform>Windows</Platform>
+  <Config />
+  <SourceFiles>
+    <File>C:/Users/User/Desktop/KillZombies/Content/box.png</File>
+    <File>C:/Users/User/Desktop/KillZombies/Content/brick.png</File>
+    <File>C:/Users/User/Desktop/KillZombies/Content/bulletHorizontal.png</File>
+    <File>C:/Users/User/Desktop/KillZombies/Content/bulletVertical.png</File>
+    <File>C:/Users/User/Desktop/KillZombies/Content/chel.png</File>
+    <File>C:/Users/User/Desktop/KillZombies/Content/coin.png</File>
+    <File>C:/Users/User/Desktop/KillZombies/Content/green1.png</File>
+    <File>C:/Users/User/Desktop/KillZombies/Content/green2.png</File>
+    <File>C:/Users/User/Desktop/KillZombies/Content/grey.png</File>
+    <File>C:/Users/User/Desktop/KillZombies/Content/myfont.spritefont</File>
+    <File>C:/Users/User/Desktop/KillZombies/Content/red.png</File>
+    <File>C:/Users/User/Desktop/KillZombies/Content/zombie1.png</File>
+    <File>C:/Users/User/Desktop/KillZombies/Content/zombie2.png</File>
+    <File>C:/Users/User/Desktop/KillZombies/Content/zombie3.png</File>
+  </SourceFiles>
+  <DestFiles>
+    <File xsi:nil="true" />
+    <File xsi:nil="true" />
+    <File xsi:nil="true" />
+    <File xsi:nil="true" />
+    <File xsi:nil="true" />
+    <File xsi:nil="true" />
+    <File xsi:nil="true" />
+    <File xsi:nil="true" />
+    <File xsi:nil="true" />
+    <File xsi:nil="true" />
+    <File xsi:nil="true" />
+    <File xsi:nil="true" />
+    <File xsi:nil="true" />
+    <File xsi:nil="true" />
+  </DestFiles>
+</SourceFileCollection>
