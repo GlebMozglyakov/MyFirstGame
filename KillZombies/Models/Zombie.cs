@@ -17,16 +17,15 @@ namespace KillZombies.Models
 
         private Texture2D CurrentTexture;
 
-        public List<Point> ZombiesPath;
-
         public int Health { get; set; }
 
         private int speed = 3;
 
         private SpriteEffects effect;
 
-        public MoveDirection Direction { get; set; }
+        private SpriteBatch spriteBatch;
 
+        public MoveDirection Direction { get; set; }
 
         private Rectangle rectangle;
 
@@ -66,14 +65,16 @@ namespace KillZombies.Models
             }
         }
 
-        public Zombie(ContentManager Content, Rectangle rectangle, int zombiesIndex, int[,] map, Player player)
+        public Zombie(ContentManager Content, Rectangle rectangle, int zombiesIndex, int[,] map, Player player, SpriteBatch _spriteBatch)
         {
             Zombie1Texture = Content.Load<Texture2D>("zombie1");
             Zombie2Texture = Content.Load<Texture2D>("zombie2");
             Zombie3Texture = Content.Load<Texture2D>("zombie3");
             Zombies = new Texture2D[3] { Zombie1Texture, Zombie2Texture, Zombie3Texture };
             CurrentTexture = Zombies[zombiesIndex];
+            Health = 100;
             //ZombiesPath = ShortestPath.FindPath(map, new Point(X / 32, Y / 32), new Point(player.X/ 32, player.Y / 32));
+            this.spriteBatch = _spriteBatch;
             this.rectangle = rectangle;
         }
 
@@ -95,7 +96,55 @@ namespace KillZombies.Models
                     break;
             }
 
-            spriteBatch.Draw(CurrentTexture, new Vector2(X, Y), null, Color.White, 0, Vector2.Zero, 0.15f, effect, 0);
+            spriteBatch.Draw(CurrentTexture, new Vector2(X, Y), null, Color.White, 0, Vector2.Zero, 0.12f, effect, 0);
+        }
+
+        public void Move(Player player)
+        {
+            var zombiesSteps = GetSteps(player);
+            var index = new Point(X / 32, Y / 32);
+            var step = new Point();
+
+            if (zombiesSteps.TryGetValue(index, out step))
+            {
+                X += step.X * 2;
+                Y += step.Y * 2;
+            }
+        }
+
+        private Dictionary<Point, Point> GetSteps(Player player)
+        {
+            var path = GetPath(player, Level1.map); 
+            var dict = new Dictionary<Point, Point>();
+            if (path == null)
+                return dict;
+
+            for (int i = 0; i < path.Count - 1; i++)
+            {
+                var fromPoint = path[i];
+                var toPoint = path[i + 1];
+                var dirX = 0;
+                var dirY = 0;
+
+                if (toPoint.X - fromPoint.X == 1)
+                    dirX = 1;
+                else if (toPoint.X - fromPoint.X == -1)
+                    dirX = -1;
+                if (toPoint.Y -  fromPoint.Y == 1)
+                    dirY = 1;
+                else if (toPoint.Y - fromPoint.Y == -1)
+                    dirY = -1;
+                dict[fromPoint] = new Point(dirX, dirY);
+            }
+
+            return dict;
+        }
+
+        public bool IsZombieAlive()
+        {
+            if (Health > 0)
+                return true;
+            return false;
         }
     }
 }

@@ -1,4 +1,5 @@
-﻿using Microsoft.Xna.Framework;
+﻿using KillZombies.Architecture;
+using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
 using System.Collections.Generic;
@@ -11,13 +12,13 @@ namespace KillZombies.Models
 
         private static Texture2D boxTexture;
 
-        private static Texture2D green1Texture;
+        private static Texture2D green1CellTexture;
 
-        private static Texture2D green2Texture;
+        private static Texture2D green2CellTexture;
 
-        private static Texture2D greyTexture;
+        private static Texture2D greyCellTexture;
 
-        private static Texture2D redTexture;
+        private static Texture2D redCellTexture;
 
         public readonly MapCell[,] World;
 
@@ -27,20 +28,20 @@ namespace KillZombies.Models
 
         public Line Width { get; set; }
 
-        private void LoadTiels(ContentManager Content)
-        {
-            brickTexture = Content.Load<Texture2D>("brick");
-            boxTexture = Content.Load<Texture2D>("box");
-            green1Texture = Content.Load<Texture2D>("green1");
-            green2Texture = Content.Load<Texture2D>("green2");
-            greyTexture = Content.Load<Texture2D>("grey");
-            redTexture = Content.Load<Texture2D>("red");
-        }
-
-        public Map(MapCell[,] world, ContentManager Content)
+        public Map(MapCell[,] world)
         {
             World = world;
-            LoadTiels(Content);
+            LoadTiels();
+        }
+
+        private void LoadTiels()
+        {
+            brickTexture = Pictures.BrickCellTexture;
+            boxTexture = Pictures.BoxCellTexture;
+            green1CellTexture = Pictures.Green1CellTexture;
+            green2CellTexture = Pictures.Green2CellTexture;
+            greyCellTexture = Pictures.GreyCellTexture;
+            redCellTexture = Pictures.RedCellTexture;
         }
 
         public List<Tile> CreateWorld()
@@ -62,7 +63,7 @@ namespace KillZombies.Models
                     switch (item)
                     {
                         case MapCell.Green1:
-                            tile = new Tile(green1Texture, rectangle);
+                            tile = new Tile(green1CellTexture, rectangle);
                             tiels.Add(tile);
                             break;
                         case MapCell.Brick:
@@ -74,11 +75,11 @@ namespace KillZombies.Models
                             tiels.Add(tile);
                             break;
                         case MapCell.Green2:
-                            tile = new Tile(green2Texture, rectangle);
+                            tile = new Tile(green2CellTexture, rectangle);
                             tiels.Add(tile);
                             break;
                         case MapCell.Grey:
-                            tile = new Tile(greyTexture, rectangle);
+                            tile = new Tile(greyCellTexture, rectangle);
                             tiels.Add(tile);
                             break;
                     }

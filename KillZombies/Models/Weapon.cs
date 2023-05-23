@@ -42,7 +42,7 @@ namespace KillZombies.Models
 
             if (currentKS.IsKeyDown(Keys.Space) && previousKS.IsKeyUp(Keys.Space) && CageIsEnable)
             {
-                bullets.Add(new Bullet(bulletHorizontalTexture, bulletVerticalTexture, new Rectangle(player.X + 75, player.Y + 55, 25, 25), player.Direction));
+                bullets.Add(new Bullet(bulletHorizontalTexture, bulletVerticalTexture, new Rectangle(player.X + 60, player.Y + 40, 25, 25), player.Direction));
 
                 cage--;
             }
@@ -63,11 +63,19 @@ namespace KillZombies.Models
                 bullet.Draw(spriteBatch);
         }
 
-        public void DeleteBullets(Borders map)
+        public void DeleteBullets(Borders map, Zombie[] zombies, MapCell[,] world)
         {
-            foreach (Bullet bullet in bullets.Reverse<Bullet>())
+            foreach (var bullet in bullets.Reverse<Bullet>())
             {
                 if (bullet.IsOutOfScreen(map))
+                    bullets.Remove(bullet);
+                foreach (var zombie in zombies)
+                    if (bullet.Rectangle.Intersects(zombie.Rectangle))
+                    {
+                        bullets.Remove(bullet);
+                        zombie.Health -= 10;
+                    }
+                if (world[bullet.Y / 32, bullet.X / 32] != MapCell.Green1)
                     bullets.Remove(bullet);
             }
         }

@@ -19,7 +19,7 @@ namespace KillZombies.Models
             Zombies = new Zombie[5];
             spriteBatch = _spriteBatch;
             this.borders = borders;
-            spawnPositions = new Point[5] { new Point(100, 100), new Point(400, 800), new Point(900, 500), new Point(900, 500), new Point(900, 400) };
+            spawnPositions = new Point[5] { new Point(100, 100), new Point(400, 800), new Point(900, 500), new Point(1750, 500), new Point(900, 400) };
             InitializeZombies(Content, player);
         }
 
@@ -29,7 +29,7 @@ namespace KillZombies.Models
             {
                 var position = spawnPositions[i];
                 //var position = Position.ComputePosition(borders, CreateWorld());
-                Zombies[i] = new Zombie(Content, new Rectangle(position.X, position.Y, 70, 140), i % 3, map, player);
+                Zombies[i] = new Zombie(Content, new Rectangle(position.X, position.Y, 60, 120), i % 3, map, player, spriteBatch);
             }
         }
 
