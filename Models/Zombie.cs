@@ -17,8 +17,6 @@ namespace KillZombies.Models
 
         private Texture2D CurrentTexture;
 
-        private List<Point> ZombiesPath;
-
         public int Health { get; set; }
 
         private int speed = 3;
@@ -103,32 +101,23 @@ namespace KillZombies.Models
 
         public void Move(Player player)
         {
-            var dict = GetSteps(player);
+            var zombiesSteps = GetSteps(player);
             var index = new Point(X / 32, Y / 32);
-            var p = new Point();
-            if (dict.TryGetValue(index, out p))
-            {
-                X += p.X * 32;
-                Y += p.Y * 32;
-            }
-            //var path = GetPath(player, Level1.map);
+            var step = new Point();
 
-            //foreach (var point in path)
-            //{
-            //    //System.Threading.Thread.Sleep(1);
-            //    X = point.X;
-            //    Y = point.Y;
-            //    spriteBatch.Begin();
-            //    Draw(spriteBatch);
-            //    spriteBatch.End();
-                
-            //}
+            if (zombiesSteps.TryGetValue(index, out step))
+            {
+                X += step.X * 2;
+                Y += step.Y * 2;
+            }
         }
 
         private Dictionary<Point, Point> GetSteps(Player player)
         {
-            var path = GetPath(player, Level1.map);
+            var path = GetPath(player, Level1.map); 
             var dict = new Dictionary<Point, Point>();
+            if (path == null)
+                return dict;
 
             for (int i = 0; i < path.Count - 1; i++)
             {

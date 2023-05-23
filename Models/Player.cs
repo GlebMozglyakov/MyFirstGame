@@ -1,4 +1,5 @@
-﻿using Microsoft.Xna.Framework;
+﻿using KillZombies.Architecture;
+using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 
@@ -15,8 +16,6 @@ namespace KillZombies.Models
         private int speed = 5;
 
         private SpriteEffects effect;
-
-        //public Vector2 CurrentPosition { get; set; }
 
         public MoveDirection Direction { get; set; }
 
@@ -58,11 +57,10 @@ namespace KillZombies.Models
             }
         }
 
-        public Player(Texture2D texture, Rectangle rectangle)
+        public Player(Rectangle rectangle)
         {
-            Texture = texture;
+            Texture = Pictures.PlayerTexture;
             this.rectangle = rectangle;
-            //CurrentPosition = new Vector2(X, Y);
         }
 
         public void Draw(SpriteBatch spriteBatch)
@@ -89,7 +87,6 @@ namespace KillZombies.Models
                 && world.World[(Y)/ 32, (X + 30 - speed) / 32] == MapCell.Green1 
                 && world.World[(Y + 90) / 32, (X + 30 - speed) / 32] == MapCell.Green1)
             {
-                //CurrentPosition = new Vector2(CurrentPosition.X - speed, CurrentPosition.Y);
                 Direction = MoveDirection.Left;
                 X -= speed;
             }
@@ -97,7 +94,6 @@ namespace KillZombies.Models
                 && world.World[(Y)/ 32, (X + 30 + speed) / 32] == MapCell.Green1 
                 && world.World[(Y + 90) / 32, (X + 30 + speed) / 32] == MapCell.Green1)
             {
-                //CurrentPosition = new Vector2(CurrentPosition.X + speed, CurrentPosition.Y);
                 Direction = MoveDirection.Right;
                 X += speed;
             }
@@ -105,7 +101,6 @@ namespace KillZombies.Models
                 && world.World[(Y - speed) / 32, (X + 30)/ 32] == MapCell.Green1) 
                 //&& world.World[(Y - speed) / 32, (X + 30 + 30) / 32] == MapCell.Green1)
             {
-                //CurrentPosition = new Vector2(CurrentPosition.X, CurrentPosition.Y - speed);
                 Direction = MoveDirection.Up;
                 Y -= speed;
             }
@@ -113,7 +108,6 @@ namespace KillZombies.Models
                 && world.World[(Y + 90 + speed) / 32, (X + 30) / 32] == MapCell.Green1)
                 //&& world.World[(Y + 90 + speed) / 32, (X + 58) / 32] == MapCell.Green1)
             {
-                //CurrentPosition = new Vector2(CurrentPosition.X, CurrentPosition.Y + speed);
                 Direction = MoveDirection.Down;
                 Y += speed;
             }

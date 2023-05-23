@@ -1,4 +1,5 @@
-﻿using KillZombies.Models;
+﻿using KillZombies.Architecture;
+using KillZombies.Models;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
@@ -44,8 +45,10 @@ namespace KillZombies
             _spriteBatch = new SpriteBatch(GraphicsDevice);
 
             // TODO: use this.Content to load your game content here
-            world = new Map(Level1.CreateWorld(), Content);
-            player = new Player(Content.Load<Texture2D>("chel"), new Rectangle(800, 600, 60, 120));
+            Pictures.Load(Content);
+
+            world = new Map(Level1.CreateWorld());
+            player = new Player(new Rectangle(800, 600, 60, 120));
             coin = new Coin(Content.Load<Texture2D>("coin"), new Rectangle(0, 0, 27, 27), Position.ComputePosition(map, world.World));
             mainFont = Content.Load<SpriteFont>("myfont");
             weapon = new Weapon(Content);
@@ -63,11 +66,6 @@ namespace KillZombies
             coin.Update(coin, map, player, world.World);
             weapon.Create(player, coin);
             weapon.DeleteBullets(map, level1.Zombies, world.World);
-
-            if (Keyboard.GetState().IsKeyDown(Keys.Enter))
-            {
-
-            }
 
             for (int i = 0; i < 5; i++)
             {

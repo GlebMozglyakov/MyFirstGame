@@ -50,7 +50,9 @@ namespace KillZombies.Models
                 openSet.Remove(currentNode);
                 closedSet.Add(currentNode);
 
-                foreach (var neighbourNode in GetNeighbours(currentNode, final, map))
+                var neighbours = GetNeighbours(currentNode, final, map);
+
+                foreach (var neighbourNode in neighbours)
                 {
                     if (closedSet.Count(node => node.Position == neighbourNode.Position) > 0)
                         continue;
@@ -67,7 +69,7 @@ namespace KillZombies.Models
                     }
                 }
             }
-            return null;//new List<Point>() { new Point (100, 100) };//null;
+            return null;//new List<Point>() { new Point(0, 0) };//null;
         }
 
         private static int GetPathLength(Point from, Point to)
