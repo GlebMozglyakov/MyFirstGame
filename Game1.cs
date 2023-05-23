@@ -62,7 +62,7 @@ namespace KillZombie
                 Exit();
 
             // TODO: Add your update logic here
-            player.Move(map, world);
+            player.Move(world);
             coin.Update(coin, map, player, world.World);
             weapon.Create(player, coin);
             weapon.DeleteBullets(map, level1.Zombies, world.World);

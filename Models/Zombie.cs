@@ -74,7 +74,6 @@ namespace KillZombie.Models
             Zombies = new Texture2D[3] { Zombie1Texture, Zombie2Texture, Zombie3Texture };
             CurrentTexture = Zombies[zombiesIndex];
             Health = 100;
-            //ZombiesPath = ShortestPath.FindPath(map, new Point(X / 32, Y / 32), new Point(player.X/ 32, player.Y / 32));
             this.spriteBatch = _spriteBatch;
             this.rectangle = rectangle;
         }

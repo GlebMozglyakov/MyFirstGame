@@ -13,7 +13,7 @@ namespace KillZombie.Models
 
         public int Armor { get; set; }
 
-        private int speed = 5;
+        private int speed = 10;
 
         private SpriteEffects effect;
 
@@ -78,39 +78,75 @@ namespace KillZombie.Models
 
             spriteBatch.Draw(Texture, new Vector2(X, Y), null, Color.White, 0, Vector2.Zero, 0.12f, effect, 0);
         }
-        public void Move(Borders map, Map world)
+        public void Move(Map world)
         {
             var keyboardState = Keyboard.GetState();
             var worldMap = world.World;
 
-            if (keyboardState.IsKeyDown(Keys.Left) && X > map.Width.X1 - 10 
-                && world.World[(Y)/ 32, (X + 30 - speed) / 32] == MapCell.Green1 
-                && world.World[(Y + 90) / 32, (X + 30 - speed) / 32] == MapCell.Green1)
-            {
+            if (IsCanMoveLeft(keyboardState, worldMap))
+            { 
                 Direction = MoveDirection.Left;
                 X -= speed;
             }
-            if (keyboardState.IsKeyDown(Keys.Right) && X < map.Width.X2 - 80  
-                && world.World[(Y)/ 32, (X + 30 + speed) / 32] == MapCell.Green1 
-                && world.World[(Y + 90) / 32, (X + 30 + speed) / 32] == MapCell.Green1)
-            {
+            if (IsCanMoveRight(keyboardState, worldMap))
+            { 
                 Direction = MoveDirection.Right;
                 X += speed;
             }
-            if (keyboardState.IsKeyDown(Keys.Up) && Y > map.Height.X1 
-                && world.World[(Y - speed) / 32, (X + 30)/ 32] == MapCell.Green1) 
-                //&& world.World[(Y - speed) / 32, (X + 30 + 30) / 32] == MapCell.Green1)
+            if (IsCanMoveUp(keyboardState, worldMap))
             {
                 Direction = MoveDirection.Up;
                 Y -= speed;
             }
-            if (keyboardState.IsKeyDown(Keys.Down) && Y < map.Height.X2 - 120 
-                && world.World[(Y + 90 + speed) / 32, (X + 30) / 32] == MapCell.Green1)
-                //&& world.World[(Y + 90 + speed) / 32, (X + 58) / 32] == MapCell.Green1)
+            if (IsCanMoveDown(keyboardState, worldMap))
             {
                 Direction = MoveDirection.Down;
                 Y += speed;
             }
+        }
+
+        private bool IsCanMoveLeft(KeyboardState keyboardState, MapCell[,] worldMap)
+        {
+            if (keyboardState.IsKeyDown(Keys.Left)
+                && worldMap[Y / 32, (X - speed) / 32] == MapCell.Green1
+                && worldMap[(Y + 25) / 32, (X - speed) / 32] == MapCell.Green1
+                && worldMap[(Y + 45) / 32, (X - speed) / 32] == MapCell.Green1
+                && worldMap[(Y + 65) / 32, (X - speed) / 32] == MapCell.Green1
+                && worldMap[(Y + 90) / 32, (X - speed) / 32] == MapCell.Green1)
+                return true;
+            return false;
+        }
+
+        private bool IsCanMoveRight(KeyboardState keyboardState, MapCell[,] worldMap)
+        {
+            if (keyboardState.IsKeyDown(Keys.Right)
+                && worldMap[Y / 32, (X + 30 + speed) / 32] == MapCell.Green1
+                && worldMap[(Y + 25) / 32, (X + 60 + speed) / 32] == MapCell.Green1
+                && worldMap[(Y + 45) / 32, (X + 60 + speed) / 32] == MapCell.Green1
+                && worldMap[(Y + 65) / 32, (X + 30 + speed) / 32] == MapCell.Green1
+                && worldMap[(Y + 90) / 32, (X + 30 + speed) / 32] == MapCell.Green1)
+                return true;
+            return false;
+        }
+
+        private bool IsCanMoveUp(KeyboardState keyboardState, MapCell[,] worldMap)
+        {
+            if (keyboardState.IsKeyDown(Keys.Up)
+                && worldMap[(Y - speed) / 32, X / 32] == MapCell.Green1
+                && worldMap[(Y - speed) / 32, (X + 30) / 32] == MapCell.Green1
+                && worldMap[(Y - speed) / 32, (X + 58) / 32] == MapCell.Green1)
+                return true;
+            return false;
+        }
+
+        private bool IsCanMoveDown(KeyboardState keyboardState, MapCell[,] worldMap)
+        {
+            if (keyboardState.IsKeyDown(Keys.Down)
+                && worldMap[(Y + 90 + speed) / 32, X / 32] == MapCell.Green1
+                && worldMap[(Y + 90 + speed) / 32, (X + 30) / 32] == MapCell.Green1
+                && worldMap[(Y + 90 + speed) / 32, (X + 58) / 32] == MapCell.Green1)
+                return true;
+            return false;
         }
     }
 }
