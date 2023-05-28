@@ -1,4 +1,5 @@
-﻿using Microsoft.Xna.Framework;
+﻿using KillZombie.Architecture;
+using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 
@@ -8,13 +9,13 @@ namespace KillZombie.Models
     {
         private SpriteEffects effect;
 
-        private int speed = 10;
-
         public MoveDirection Direction;
 
         private Texture2D textureVertical;
 
         private Texture2D textureHorizontal;
+
+        private int speed = 10;
 
         private Rectangle rectangle;
 
@@ -60,12 +61,12 @@ namespace KillZombie.Models
 
         public bool Intersected { get; set; } = false;
 
-        public Bullet(Texture2D textureHoriz, Texture2D textureVert, Rectangle rectangle, MoveDirection direction)
+        public Bullet(Vector2 playerPosition, MoveDirection direction)
         {
-            textureHorizontal = textureHoriz;
-            textureVertical = textureVert;
-            Rectangle = rectangle;
+            textureHorizontal = Pictures.HorizontalBulletTexture;
+            textureVertical = Pictures.VerticalBulletTexture;
             Direction = direction;
+            Rectangle = new Rectangle((int)playerPosition.X + 60, (int)playerPosition.Y + 40, 25, 25);
         }
 
         public void Draw(SpriteBatch spriteBatch)
@@ -102,9 +103,9 @@ namespace KillZombie.Models
             spriteBatch.Draw(texture, Rectangle, null, Color.White, 0f, new Vector2(texture.Width / 2, texture.Height / 2), effect, 0f);
         }
 
-        public bool IsOutOfScreen(Borders map)
+        public bool IsOutOfScreen()
         {
-            if (X > map.Width.X2 || X < map.Width.X1 || Y > map.Height.X2 || Y < map.Height.X1 || Intersected)
+            if (X > 10 || X < 1900 || Y > 0 || Y < 1050 || Intersected)
                 return true;
 
             return false;

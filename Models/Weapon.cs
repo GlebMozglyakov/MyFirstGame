@@ -1,6 +1,5 @@
 ﻿using KillZombie.Architecture;
 using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using System.Collections.Generic;
@@ -10,15 +9,15 @@ namespace KillZombie.Models
 {
     class Weapon
     {
-        private List<Bullet> bullets = new List<Bullet>();
-        
+        private List<Bullet> bullets;
+
+        private HashSet<Bullet> bulletsAddList;
+
+        private HashSet<Bullet> bulletsRemoveList;
+
         private KeyboardState currentKS;
 
         private KeyboardState previousKS;
-
-        private Texture2D bulletHorizontalTexture;
-
-        private Texture2D bulletVerticalTexture;
 
         public int cage = 10;
         bool CageIsEnable
@@ -33,17 +32,21 @@ namespace KillZombie.Models
 
         public Weapon()
         {
-            bulletVerticalTexture = Pictures.VerticalBulletTexture;
-            bulletHorizontalTexture = Pictures.HorizontalBulletTexture;
+            bullets = new List<Bullet>();
+            bulletsAddList = new HashSet<Bullet>();
+            bulletsRemoveList = new HashSet<Bullet>();
         }
 
-        public void Create(Player player, Coin coin)
+        public void CreateBullets(GameModel game)
         {
             currentKS = Keyboard.GetState();
+            var playerPosition = game.CurrentLevel.Player.Position;
+            var direction = game.CurrentLevel.Player.Direction;
+            var coin = game.CurrentLevel.Player.Coin;
 
             if (currentKS.IsKeyDown(Keys.Space) && previousKS.IsKeyUp(Keys.Space) && CageIsEnable)
             {
-                bullets.Add(new Bullet(bulletHorizontalTexture, bulletVerticalTexture, new Rectangle(player.X + 60, player.Y + 40, 25, 25), player.Direction));
+                bullets.Add(new Bullet(playerPosition, direction));
 
                 cage--;
             }
@@ -58,27 +61,34 @@ namespace KillZombie.Models
             previousKS = currentKS;
         }
 
+        public void DeleteBullets(GameModel game)
+        {
+            var mapCells = game.CurrentLevel.LevelMap.MapCells;
+            var zombies = game.CurrentLevel.Zombies;
+
+            foreach (var bullet in bullets.Reverse<Bullet>())
+            {
+                foreach (var zombie in zombies)
+                    if (bullet.Rectangle.Intersects(zombie.Rectangle))
+                    {
+                        bullets.Remove(bullet);
+                        zombie.OnHit();
+                    }
+                if (mapCells[(int)bullet.Y / 32, (int)bullet.X / 32] != MapCell.Green1)
+                    bullets.Remove(bullet);
+            }
+        }
+
         public void Draw(SpriteBatch spriteBatch)
         {
             foreach (var bullet in bullets)
                 bullet.Draw(spriteBatch);
         }
 
-        public void DeleteBullets(Borders map, Zombie[] zombies, MapCell[,] world)
+        public void Update(GameModel game)
         {
-            foreach (var bullet in bullets.Reverse<Bullet>())
-            {
-                if (bullet.IsOutOfScreen(map))
-                    bullets.Remove(bullet);
-                foreach (var zombie in zombies)
-                    if (bullet.Rectangle.Intersects(zombie.Rectangle))
-                    {
-                        bullets.Remove(bullet);
-                        zombie.Health -= 10;
-                    }
-                if (world[bullet.Y / 32, bullet.X / 32] != MapCell.Green1)
-                    bullets.Remove(bullet);
-            }
+            CreateBullets(game);
+            DeleteBullets(game);
         }
     }
 }

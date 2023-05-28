@@ -64,44 +64,44 @@ namespace KillZombie.Models
 
         public bool IsWasCollected { get; set; } = false;
 
-        public Coin(Rectangle rectangle)
+        public Coin()
         {
             coinTexture = Pictures.CoinTexture;
-            this.rectangle = rectangle;
+            Rectangle = new Rectangle(0, 0, 27, 27);
         }
 
-        public Coin(Rectangle rectangle, Position position)
+        public Coin(GetPosition position)
         {
             coinTexture = Pictures.CoinTexture;
-            this.rectangle = rectangle;
+            Rectangle = new Rectangle(0, 0, 27, 27);
             X = position.X;
             Y = position.Y;
         }
 
-        public void SetPosition(Position position)
+        public void SetPosition(GetPosition position)
         {
             X = position.X;
             Y = position.Y;
         }
 
-        public void Update(Coin coin, Borders map, Player player, MapCell[,] world)
+        public void Update(Rectangle playerRectangle, MapCell[,] mapCells)
         {
-            if (coin.IsWasCollected)
+            if (this.IsWasCollected)
             {
-                coin.SetPosition(Position.ComputePosition(map, world));
-                coin.IsWasCollected = false;
+                this.SetPosition(GetPosition.ComputePosition(mapCells));
+                this.IsWasCollected = false;
             }
 
-            if (player.Rectangle.Intersects(coin.Rectangle))
+            if (playerRectangle.Intersects(this.Rectangle))
             {
-                coin.IsWasCollected = true;
+                this.IsWasCollected = true;
                 Score++;
             }
         }
 
-        public void Draw(SpriteBatch spriteBatch, Coin coin)
+        public void Draw(SpriteBatch spriteBatch)
         {
-            spriteBatch.Draw(coin.coinTexture, coin.Rectangle, Color.White);
+            spriteBatch.Draw(this.coinTexture, this.Rectangle, Color.White);
         }
     }
 }

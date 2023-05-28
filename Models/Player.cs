@@ -5,65 +5,123 @@ using Microsoft.Xna.Framework.Input;
 
 namespace KillZombie.Models
 {
-    class Player
+    class Player : Entity
     {
-        public Texture2D Texture { get; set; }
+        public Weapon weapon;
 
-        public int Health { get; set; }
+        public Coin Coin;
 
-        public int Armor { get; set; }
-
-        private int speed = 10;
+        private int frames;
 
         private SpriteEffects effect;
 
         public MoveDirection Direction { get; set; }
 
+        public Player()
+        {
+            image = Pictures.PlayerTexture;
+            Speed = 5;
+            weapon = new Weapon();
+            Health = 100;
+            Position = new Vector2(1000, 100);
+            Coin = new Coin(new GetPosition(840, 240));
+        }
 
-        private Rectangle rectangle;
+        public void ZombieBite()
+        {
+            if (frames < 33)
+                return;
+            Health -= 10;
+            frames = 0;
+        }
 
-        public Rectangle Rectangle { 
-            get 
+        public void Move(MapCell[,] mapCells, GameModel game)
+        {
+            var keyboardState = Keyboard.GetState();
+
+            if (IsCanMoveLeft(keyboardState, mapCells))
             { 
-                return rectangle; 
-            } 
-            set 
+                Direction = MoveDirection.Left;
+                Position.X -= Speed;
+            }
+            if (IsCanMoveRight(keyboardState, mapCells))
             { 
-                rectangle = value;
+                Direction = MoveDirection.Right;
+                Position.X += Speed;
+            }
+            if (IsCanMoveUp(keyboardState, mapCells))
+            {
+                Direction = MoveDirection.Up;
+                Position.Y -= Speed;
+            }
+            if (IsCanMoveDown(keyboardState, mapCells))
+            {
+                Direction = MoveDirection.Down;
+                Position.Y += Speed;
             }
         }
 
-        public int X
+        private void Shoot(GameModel game)
         {
-            get
-            {
-                return rectangle.X;
-            }
-            set
-            {
-                rectangle.X = value;
-            }
+            weapon.Update(game);
         }
 
-        public int Y
+        private bool IsCanMoveLeft(KeyboardState keyboardState, MapCell[,] mapCells)
         {
-            get
-            {
-                return rectangle.Y;
-            }
-            set
-            {
-                rectangle.Y = value;
-            }
+            if (keyboardState.IsKeyDown(Keys.Left)
+                && mapCells[(int)(Position.Y / 32), (int)(Position.X - Speed) / 32] == MapCell.Green1
+                && mapCells[(int)(Position.Y + 25) / 32, (int)(Position.X - Speed) / 32] == MapCell.Green1
+                && mapCells[(int)(Position.Y + 45) / 32, (int)(Position.X - Speed) / 32] == MapCell.Green1
+                && mapCells[(int)(Position.Y + 65) / 32, (int)(Position.X - Speed) / 32] == MapCell.Green1
+                && mapCells[(int)(Position.Y + 90) / 32, (int)(Position.X - Speed) / 32] == MapCell.Green1)
+                return true;
+            return false;
         }
 
-        public Player(Rectangle rectangle)
+        private bool IsCanMoveRight(KeyboardState keyboardState, MapCell[,] mapCells)
         {
-            Texture = Pictures.PlayerTexture;
-            this.rectangle = rectangle;
+            if (keyboardState.IsKeyDown(Keys.Right)
+                && mapCells[(int)Position.Y / 32, (int)(Position.X + 30 + Speed) / 32] == MapCell.Green1
+                && mapCells[(int)(Position.Y + 25) / 32, (int)(Position.X + 60 + Speed) / 32] == MapCell.Green1
+                && mapCells[(int)(Position.Y + 45) / 32, (int)(Position.X + 60 + Speed) / 32] == MapCell.Green1
+                && mapCells[(int)(Position.Y + 65) / 32, (int)(Position.X + 30 + Speed) / 32] == MapCell.Green1
+                && mapCells[(int)(Position.Y + 90) / 32, (int)(Position.X + 30 + Speed) / 32] == MapCell.Green1)
+                return true;
+            return false;
         }
 
-        public void Draw(SpriteBatch spriteBatch)
+        private bool IsCanMoveUp(KeyboardState keyboardState, MapCell[,] mapCells)
+        {
+            if (keyboardState.IsKeyDown(Keys.Up)
+                && mapCells[(int)(int)(Position.Y - Speed) / 32, (int)Position.X / 32] == MapCell.Green1
+                && mapCells[(int)(Position.Y - Speed) / 32, (int)(int)(Position.X + 30) / 32] == MapCell.Green1
+                && mapCells[(int)(Position.Y - Speed) / 32, (int)(Position.X + 58) / 32] == MapCell.Green1)
+                return true;
+            return false;
+        }
+
+        private bool IsCanMoveDown(KeyboardState keyboardState, MapCell[,] mapCells)
+        {
+            if (keyboardState.IsKeyDown(Keys.Down)
+                && mapCells[(int)(Position.Y + 90 + Speed) / 32, (int)Position.X / 32] == MapCell.Green1
+                && mapCells[(int)(Position.Y + 90 + Speed) / 32, (int)(Position.X + 30) / 32] == MapCell.Green1
+                && mapCells[(int)(Position.Y + 90 + Speed) / 32, (int)(Position.X + 58) / 32] == MapCell.Green1)
+                return true;
+            return false;
+        }
+
+        public override void Update(GameModel game)
+        {
+            if (this.IsAlive())
+            {
+                Move(game.CurrentLevel.LevelMap.MapCells, game);
+                Shoot(game);
+                Coin.Update(Rectangle, game.CurrentLevel.LevelMap.MapCells);
+            }
+            frames++;
+        }
+
+        public override void Draw(SpriteBatch spriteBatch)
         {
             switch (Direction)
             {
@@ -76,77 +134,9 @@ namespace KillZombie.Models
                     break;
             }
 
-            spriteBatch.Draw(Texture, new Vector2(X, Y), null, Color.White, 0, Vector2.Zero, 0.12f, effect, 0);
-        }
-        public void Move(Map world)
-        {
-            var keyboardState = Keyboard.GetState();
-            var worldMap = world.World;
-
-            if (IsCanMoveLeft(keyboardState, worldMap))
-            { 
-                Direction = MoveDirection.Left;
-                X -= speed;
-            }
-            if (IsCanMoveRight(keyboardState, worldMap))
-            { 
-                Direction = MoveDirection.Right;
-                X += speed;
-            }
-            if (IsCanMoveUp(keyboardState, worldMap))
-            {
-                Direction = MoveDirection.Up;
-                Y -= speed;
-            }
-            if (IsCanMoveDown(keyboardState, worldMap))
-            {
-                Direction = MoveDirection.Down;
-                Y += speed;
-            }
-        }
-
-        private bool IsCanMoveLeft(KeyboardState keyboardState, MapCell[,] worldMap)
-        {
-            if (keyboardState.IsKeyDown(Keys.Left)
-                && worldMap[Y / 32, (X - speed) / 32] == MapCell.Green1
-                && worldMap[(Y + 25) / 32, (X - speed) / 32] == MapCell.Green1
-                && worldMap[(Y + 45) / 32, (X - speed) / 32] == MapCell.Green1
-                && worldMap[(Y + 65) / 32, (X - speed) / 32] == MapCell.Green1
-                && worldMap[(Y + 90) / 32, (X - speed) / 32] == MapCell.Green1)
-                return true;
-            return false;
-        }
-
-        private bool IsCanMoveRight(KeyboardState keyboardState, MapCell[,] worldMap)
-        {
-            if (keyboardState.IsKeyDown(Keys.Right)
-                && worldMap[Y / 32, (X + 30 + speed) / 32] == MapCell.Green1
-                && worldMap[(Y + 25) / 32, (X + 60 + speed) / 32] == MapCell.Green1
-                && worldMap[(Y + 45) / 32, (X + 60 + speed) / 32] == MapCell.Green1
-                && worldMap[(Y + 65) / 32, (X + 30 + speed) / 32] == MapCell.Green1
-                && worldMap[(Y + 90) / 32, (X + 30 + speed) / 32] == MapCell.Green1)
-                return true;
-            return false;
-        }
-
-        private bool IsCanMoveUp(KeyboardState keyboardState, MapCell[,] worldMap)
-        {
-            if (keyboardState.IsKeyDown(Keys.Up)
-                && worldMap[(Y - speed) / 32, X / 32] == MapCell.Green1
-                && worldMap[(Y - speed) / 32, (X + 30) / 32] == MapCell.Green1
-                && worldMap[(Y - speed) / 32, (X + 58) / 32] == MapCell.Green1)
-                return true;
-            return false;
-        }
-
-        private bool IsCanMoveDown(KeyboardState keyboardState, MapCell[,] worldMap)
-        {
-            if (keyboardState.IsKeyDown(Keys.Down)
-                && worldMap[(Y + 90 + speed) / 32, X / 32] == MapCell.Green1
-                && worldMap[(Y + 90 + speed) / 32, (X + 30) / 32] == MapCell.Green1
-                && worldMap[(Y + 90 + speed) / 32, (X + 58) / 32] == MapCell.Green1)
-                return true;
-            return false;
+            spriteBatch.Draw(image, Position, null, Color.White, 0, Vector2.Zero, 0.12f, effect, 0);
+            weapon.Draw(spriteBatch);
+            Coin.Draw(spriteBatch);
         }
     }
 }
