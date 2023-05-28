@@ -7,7 +7,7 @@ namespace KillZombie.Models
 {
     public class PathNode
     {
-        public Point Position { get; set; }
+        public Pointt Position { get; set; }
 
         public int PathLengthFromStart { get; set; }
 
@@ -26,7 +26,7 @@ namespace KillZombie.Models
 
     public class ShortestPath
     {
-        public static List<Point> FindPath(int[,] map, Point start, Point final)
+        public static List<Pointt> FindPath(int[,] map, Pointt start, Pointt final)
         {
             var closedSet = new Collection<PathNode>();
             var openSet = new Collection<PathNode>();
@@ -72,7 +72,7 @@ namespace KillZombie.Models
             return null;//new List<Point>() { new Point(0, 0) };//null;
         }
 
-        private static int GetPathLength(Point from, Point to)
+        private static int GetPathLength(Pointt from, Pointt to)
         {
             return Math.Abs(from.X - to.X) + Math.Abs(from.Y - to.Y);
         }
@@ -83,15 +83,15 @@ namespace KillZombie.Models
         }
 
         private static Collection<PathNode> GetNeighbours(PathNode pathNode,
-  Point final, int[,] map)
+  Pointt final, int[,] map)
         {
             var result = new Collection<PathNode>();
 
-            Point[] neighbourPoints = new Point[4];
-            neighbourPoints[0] = new Point(pathNode.Position.X + 1, pathNode.Position.Y);
-            neighbourPoints[1] = new Point(pathNode.Position.X - 1, pathNode.Position.Y);
-            neighbourPoints[2] = new Point(pathNode.Position.X, pathNode.Position.Y + 1);
-            neighbourPoints[3] = new Point(pathNode.Position.X, pathNode.Position.Y - 1);
+            Pointt[] neighbourPoints = new Pointt[4];
+            neighbourPoints[0] = new Pointt(pathNode.Position.X + 1, pathNode.Position.Y);
+            neighbourPoints[1] = new Pointt(pathNode.Position.X - 1, pathNode.Position.Y);
+            neighbourPoints[2] = new Pointt(pathNode.Position.X, pathNode.Position.Y + 1);
+            neighbourPoints[3] = new Pointt(pathNode.Position.X, pathNode.Position.Y - 1);
 
             foreach (var point in neighbourPoints)
             {
@@ -115,9 +115,9 @@ namespace KillZombie.Models
             return result;
         }
 
-        private static List<Point> GetPathForNode(PathNode pathNode)
+        private static List<Pointt> GetPathForNode(PathNode pathNode)
         {
-            var result = new List<Point>();
+            var result = new List<Pointt>();
             var currentNode = pathNode;
             while (currentNode != null)
             {
