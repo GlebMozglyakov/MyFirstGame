@@ -7,6 +7,7 @@
         Box,
         Green2,
         Grey,
-        Red
+        Red,
+        Grave
     }
 }

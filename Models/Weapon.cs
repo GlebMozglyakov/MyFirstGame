@@ -1,5 +1,4 @@
 ﻿using KillZombie.Architecture;
-using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using System.Collections.Generic;
@@ -11,15 +10,11 @@ namespace KillZombie.Models
     {
         private List<Bullet> bullets;
 
-        private HashSet<Bullet> bulletsAddList;
-
-        private HashSet<Bullet> bulletsRemoveList;
-
         private KeyboardState currentKS;
 
         private KeyboardState previousKS;
 
-        public int cage = 10;
+        public int cage = 11;
         bool CageIsEnable
         {
             get
@@ -33,13 +28,12 @@ namespace KillZombie.Models
         public Weapon()
         {
             bullets = new List<Bullet>();
-            bulletsAddList = new HashSet<Bullet>();
-            bulletsRemoveList = new HashSet<Bullet>();
         }
 
-        public void CreateBullets(GameModel game)
+        private void CreateBullets(GameModel game)
         {
             currentKS = Keyboard.GetState();
+
             var playerPosition = game.CurrentLevel.Player.Position;
             var direction = game.CurrentLevel.Player.Direction;
             var coin = game.CurrentLevel.Player.Coin;
@@ -61,7 +55,7 @@ namespace KillZombie.Models
             previousKS = currentKS;
         }
 
-        public void DeleteBullets(GameModel game)
+        private void DeleteBullets(GameModel game)
         {
             var mapCells = game.CurrentLevel.LevelMap.MapCells;
             var zombies = game.CurrentLevel.Zombies;
@@ -74,21 +68,21 @@ namespace KillZombie.Models
                         bullets.Remove(bullet);
                         zombie.OnHit();
                     }
-                if (mapCells[(int)bullet.Y / 32, (int)bullet.X / 32] != MapCell.Green1)
+                if (mapCells[bullet.Y / 32, bullet.X / 32] != MapCell.Green1)
                     bullets.Remove(bullet);
             }
-        }
-
-        public void Draw(SpriteBatch spriteBatch)
-        {
-            foreach (var bullet in bullets)
-                bullet.Draw(spriteBatch);
         }
 
         public void Update(GameModel game)
         {
             CreateBullets(game);
             DeleteBullets(game);
+        }
+
+        public void Draw(SpriteBatch spriteBatch)
+        {
+            foreach (var bullet in bullets)
+                bullet.Draw(spriteBatch);
         }
     }
 }

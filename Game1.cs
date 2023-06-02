@@ -2,7 +2,7 @@
 using KillZombie.LoadContent;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using Microsoft.Xna.Framework.Input;
+using Microsoft.Xna.Framework.Media;
 
 namespace KillZombie
 {
@@ -11,6 +11,7 @@ namespace KillZombie
         private GraphicsDeviceManager _graphics;
         private SpriteBatch _spriteBatch;
         private GameModel _gameModel;
+        private MusicManager _musicManager;
 
         public Game1()
         {
@@ -24,8 +25,6 @@ namespace KillZombie
 
         protected override void Initialize()
         {
-            // TODO: Add your initialization logic here
-
             base.Initialize();
         }
 
@@ -33,19 +32,22 @@ namespace KillZombie
         {
             _spriteBatch = new SpriteBatch(GraphicsDevice);
 
-            // TODO: use this.Content to load your game content here
             Pictures.LoadPictures(Content);
             Fonts.LoadFonts(Content);
+            Music.LoadMusic(Content);
+            MediaPlayer.Play(Music.MenuMusic);
+
             _gameModel = new GameModel();
+            _musicManager = new MusicManager(_gameModel);
         }
 
         protected override void Update(GameTime gameTime)
         {
-            if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
-                Exit();
-
-            // TODO: Add your update logic here
+            _musicManager.Update();
             _gameModel.Update();
+
+            if (_gameModel.State == GameState.Exit)
+                Exit();
 
             base.Update(gameTime);
         }
@@ -54,7 +56,6 @@ namespace KillZombie
         {
             GraphicsDevice.Clear(Color.CornflowerBlue);
 
-            // TODO: Add your drawing code here
             _spriteBatch.Begin();
 
             _gameModel.Draw(_spriteBatch);

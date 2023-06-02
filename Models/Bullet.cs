@@ -1,7 +1,6 @@
 ﻿using KillZombie.Architecture;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using Microsoft.Xna.Framework.Input;
 
 namespace KillZombie.Models
 {
@@ -9,7 +8,7 @@ namespace KillZombie.Models
     {
         private SpriteEffects effect;
 
-        public MoveDirection Direction;
+        private MoveDirection direction;
 
         private Texture2D textureVertical;
 
@@ -18,10 +17,6 @@ namespace KillZombie.Models
         private int speed = 10;
 
         private Rectangle rectangle;
-
-        private KeyboardState currentKS;
-
-        private KeyboardState previousKS;
 
         public Rectangle Rectangle
         {
@@ -65,15 +60,23 @@ namespace KillZombie.Models
         {
             textureHorizontal = Pictures.HorizontalBulletTexture;
             textureVertical = Pictures.VerticalBulletTexture;
-            Direction = direction;
+            this.direction = direction;
             Rectangle = new Rectangle((int)playerPosition.X + 60, (int)playerPosition.Y + 40, 25, 25);
+        }
+
+        public bool IsOutOfScreen()
+        {
+            if (X > 10 || X < 1900 || Y > 0 || Y < 1050 || Intersected)
+                return true;
+
+            return false;
         }
 
         public void Draw(SpriteBatch spriteBatch)
         {
             Texture2D texture = null;
 
-            switch (Direction)
+            switch (direction)
             {
                 case MoveDirection.Left:
                     texture = textureHorizontal;
@@ -101,14 +104,6 @@ namespace KillZombie.Models
             }
 
             spriteBatch.Draw(texture, Rectangle, null, Color.White, 0f, new Vector2(texture.Width / 2, texture.Height / 2), effect, 0f);
-        }
-
-        public bool IsOutOfScreen()
-        {
-            if (X > 10 || X < 1900 || Y > 0 || Y < 1050 || Intersected)
-                return true;
-
-            return false;
         }
     }
 }

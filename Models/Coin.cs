@@ -6,7 +6,7 @@ namespace KillZombie.Models
 {
     class Coin
     {
-        public Texture2D coinTexture { get; set; }
+        private Texture2D coinTexture { get; set; }
 
         private Rectangle rectangle;
 
@@ -62,7 +62,7 @@ namespace KillZombie.Models
             }
         }
 
-        public bool IsWasCollected { get; set; } = false;
+        private bool IsWasCollected { get; set; } = false;
 
         public Coin()
         {
@@ -78,7 +78,7 @@ namespace KillZombie.Models
             Y = position.Y;
         }
 
-        public void SetPosition(GetPosition position)
+        private void SetPosition(GetPosition position)
         {
             X = position.X;
             Y = position.Y;
@@ -86,22 +86,22 @@ namespace KillZombie.Models
 
         public void Update(Rectangle playerRectangle, MapCell[,] mapCells)
         {
-            if (this.IsWasCollected)
+            if (IsWasCollected)
             {
-                this.SetPosition(GetPosition.ComputePosition(mapCells));
-                this.IsWasCollected = false;
+                SetPosition(GetPosition.ComputePosition(mapCells));
+                IsWasCollected = false;
             }
 
-            if (playerRectangle.Intersects(this.Rectangle))
+            if (playerRectangle.Intersects(Rectangle))
             {
-                this.IsWasCollected = true;
+                IsWasCollected = true;
                 Score++;
             }
         }
 
         public void Draw(SpriteBatch spriteBatch)
         {
-            spriteBatch.Draw(this.coinTexture, this.Rectangle, Color.White);
+            spriteBatch.Draw(coinTexture, Rectangle, Color.White);
         }
     }
 }

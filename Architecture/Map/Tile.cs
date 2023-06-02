@@ -5,13 +5,14 @@ namespace KillZombie.Models
 {
     class Tile
     {
-        Texture2D Texture;
-        Rectangle Position;
+        public Texture2D Texture;
 
-        public Tile(Texture2D texture, Rectangle rect)
+        public Rectangle Position;
+
+        public Tile(Texture2D texture, Rectangle rectangle)
         {
-            this.Texture = texture;
-            this.Position = rect;
+            Texture = texture;
+            Position = rectangle;
         }
 
         public void Draw(SpriteBatch spriteBatch)

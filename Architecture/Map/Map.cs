@@ -7,6 +7,12 @@ namespace KillZombie.Models
 {
     class Map
     {
+        public readonly int[,] MapStructure;
+
+        public readonly MapCell[,] MapCells;
+
+        public readonly List<Tile> Tiles;
+
         private static Texture2D brickTexture;
 
         private static Texture2D boxTexture;
@@ -19,11 +25,7 @@ namespace KillZombie.Models
 
         private static Texture2D redCellTexture;
 
-        public readonly int[,] MapStructure;
-
-        public readonly MapCell[,] MapCells;
-
-        public readonly List<Tile> Tiels;
+        private static Texture2D graveCellTexture;
 
         public Line Height { get; set; }
 
@@ -34,7 +36,7 @@ namespace KillZombie.Models
             LoadTiels();
             MapStructure = map;
             MapCells = GetMapCells();
-            Tiels = GetTielsList();
+            Tiles = GetTilesList();
 
         }
 
@@ -46,9 +48,10 @@ namespace KillZombie.Models
             green2CellTexture = Pictures.Green2CellTexture;
             greyCellTexture = Pictures.GreyCellTexture;
             redCellTexture = Pictures.RedCellTexture;
+            graveCellTexture = Pictures.GraveCellTexture;
         }
 
-        public MapCell[,] GetMapCells()
+        private MapCell[,] GetMapCells()
         {
             var width = MapStructure.GetLength(0);
             var height = MapStructure.GetLength(1);
@@ -78,6 +81,9 @@ namespace KillZombie.Models
                         case 5:
                             mapCells[i, j] = MapCell.Red;
                             break;
+                        case 6:
+                            mapCells[i, j] = MapCell.Grave;
+                            break;
                     }
                 }
             }
@@ -85,7 +91,7 @@ namespace KillZombie.Models
             return mapCells;
         }
 
-        public List<Tile> GetTielsList()
+        private List<Tile> GetTilesList()
         {
             var tiels = new List<Tile>();
             var mapCell = GetMapCells();
@@ -124,8 +130,15 @@ namespace KillZombie.Models
                             tile = new Tile(greyCellTexture, rectangle);
                             tiels.Add(tile);
                             break;
+                        case MapCell.Red:
+                            tile = new Tile(redCellTexture, rectangle);
+                            tiels.Add(tile);
+                            break;
+                        case MapCell.Grave:
+                            tile = new Tile(graveCellTexture, rectangle);
+                            tiels.Add(tile);
+                            break;
                     }
-
                     x += 32;
                 }
                 x = 0;

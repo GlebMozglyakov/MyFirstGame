@@ -1,35 +1,16 @@
-﻿using System;
+﻿using Microsoft.Xna.Framework;
+using System;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using System.Linq;
 
 namespace KillZombie.Models
 {
-    public class PathNode
+    class ShortestPath
     {
-        public Pointt Position { get; set; }
-
-        public int PathLengthFromStart { get; set; }
-
-        public PathNode CameFrom { get; set; }
-        
-        public int PathLength { get; set; }
-
-        public int FullPathLength
+        public static List<Point> FindPath(int[,] map, Point start, Point final)
         {
-            get
-            {
-                return PathLengthFromStart + PathLength;
-            }
-        }
-    }
-
-    public class ShortestPath
-    {
-        public static List<Pointt> FindPath(int[,] map, Pointt start, Pointt final)
-        {
-            var closedSet = new Collection<PathNode>();
-            var openSet = new Collection<PathNode>();
+            var closedSet = new List<PathNode>();
+            var openSet = new List<PathNode>();
             var startNode = new PathNode()
             {
                 Position = start,
@@ -69,29 +50,19 @@ namespace KillZombie.Models
                     }
                 }
             }
-            return null;//new List<Point>() { new Point(0, 0) };//null;
+            return null;
         }
 
-        private static int GetPathLength(Pointt from, Pointt to)
+        private static List<PathNode> GetNeighbours(PathNode pathNode, Point final, int[,] map)
         {
-            return Math.Abs(from.X - to.X) + Math.Abs(from.Y - to.Y);
-        }
+            var result = new List<PathNode>();
+            var neighbourPoints = new List<Point>();
 
-        private static int GetDistanceBetweenNeighbours()
-        {
-            return 1;
-        }
+            for (int dy = -1; dy <= 1; dy++)
+                for (int dx = -1; dx <= 1; dx++)
+                    if (dx != 0 && dy != 0) continue;
+                    else neighbourPoints.Add(new Point(pathNode.Position.X + dx, pathNode.Position.Y + dy));
 
-        private static Collection<PathNode> GetNeighbours(PathNode pathNode,
-  Pointt final, int[,] map)
-        {
-            var result = new Collection<PathNode>();
-
-            Pointt[] neighbourPoints = new Pointt[4];
-            neighbourPoints[0] = new Pointt(pathNode.Position.X + 1, pathNode.Position.Y);
-            neighbourPoints[1] = new Pointt(pathNode.Position.X - 1, pathNode.Position.Y);
-            neighbourPoints[2] = new Pointt(pathNode.Position.X, pathNode.Position.Y + 1);
-            neighbourPoints[3] = new Pointt(pathNode.Position.X, pathNode.Position.Y - 1);
 
             foreach (var point in neighbourPoints)
             {
@@ -99,15 +70,14 @@ namespace KillZombie.Models
                     continue;
                 if (point.Y < 0 || point.Y >= map.GetLength(0))
                     continue;
-                if (map[point.Y, point.X] != 0) //&& (map[point.X, point.Y] != 1))
+                if (map[point.Y, point.X] != 0)
                     continue;
 
                 var neighbourNode = new PathNode()
                 {
                     Position = point,
                     CameFrom = pathNode,
-                    PathLengthFromStart = pathNode.PathLengthFromStart +
-                    GetDistanceBetweenNeighbours(),
+                    PathLengthFromStart = pathNode.PathLengthFromStart + 1,
                     PathLength = GetPathLength(point, final)
                 };
                 result.Add(neighbourNode);
@@ -115,9 +85,9 @@ namespace KillZombie.Models
             return result;
         }
 
-        private static List<Pointt> GetPathForNode(PathNode pathNode)
+        private static List<Point> GetPathForNode(PathNode pathNode)
         {
-            var result = new List<Pointt>();
+            var result = new List<Point>();
             var currentNode = pathNode;
             while (currentNode != null)
             {
@@ -126,9 +96,31 @@ namespace KillZombie.Models
             }
             result.Reverse();
 
-            //for (int i = 0; i < result.Count; i++)
-            //    result[i] = new Point(result[i].X * 32, result[i].Y * 32);
             return result;
+        }
+
+        private static int GetPathLength(Point from, Point to)
+        {
+            return Math.Abs(from.X - to.X) + Math.Abs(from.Y - to.Y);
+        }
+    }
+
+    class PathNode
+    {
+        public Point Position { get; set; }
+
+        public int PathLengthFromStart { get; set; }
+
+        public PathNode CameFrom { get; set; }
+
+        public int PathLength { get; set; }
+
+        public int FullPathLength
+        {
+            get
+            {
+                return PathLengthFromStart + PathLength;
+            }
         }
     }
 }

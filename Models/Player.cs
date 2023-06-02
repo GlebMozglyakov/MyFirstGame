@@ -35,7 +35,7 @@ namespace KillZombie.Models
             frames = 0;
         }
 
-        public void Move(MapCell[,] mapCells, GameModel game)
+        public void Move(MapCell[,] mapCells)
         {
             var keyboardState = Keyboard.GetState();
 
@@ -69,7 +69,8 @@ namespace KillZombie.Models
         private bool IsCanMoveLeft(KeyboardState keyboardState, MapCell[,] mapCells)
         {
             if (keyboardState.IsKeyDown(Keys.Left)
-                && mapCells[(int)(Position.Y / 32), (int)(Position.X - Speed) / 32] == MapCell.Green1
+                && 
+                mapCells[(int)(Position.Y / 32), (int)(Position.X - Speed) / 32] == MapCell.Green1
                 && mapCells[(int)(Position.Y + 25) / 32, (int)(Position.X - Speed) / 32] == MapCell.Green1
                 && mapCells[(int)(Position.Y + 45) / 32, (int)(Position.X - Speed) / 32] == MapCell.Green1
                 && mapCells[(int)(Position.Y + 65) / 32, (int)(Position.X - Speed) / 32] == MapCell.Green1
@@ -81,11 +82,12 @@ namespace KillZombie.Models
         private bool IsCanMoveRight(KeyboardState keyboardState, MapCell[,] mapCells)
         {
             if (keyboardState.IsKeyDown(Keys.Right)
-                && mapCells[(int)Position.Y / 32, (int)(Position.X + 30 + Speed) / 32] == MapCell.Green1
+                && 
+                mapCells[(int)Position.Y / 32, (int)(Position.X + 60 + Speed) / 32] == MapCell.Green1
                 && mapCells[(int)(Position.Y + 25) / 32, (int)(Position.X + 60 + Speed) / 32] == MapCell.Green1
                 && mapCells[(int)(Position.Y + 45) / 32, (int)(Position.X + 60 + Speed) / 32] == MapCell.Green1
-                && mapCells[(int)(Position.Y + 65) / 32, (int)(Position.X + 30 + Speed) / 32] == MapCell.Green1
-                && mapCells[(int)(Position.Y + 90) / 32, (int)(Position.X + 30 + Speed) / 32] == MapCell.Green1)
+                && mapCells[(int)(Position.Y + 65) / 32, (int)(Position.X + 60 + Speed) / 32] == MapCell.Green1
+                && mapCells[(int)(Position.Y + 90) / 32, (int)(Position.X + 60 + Speed) / 32] == MapCell.Green1)
                 return true;
             return false;
         }
@@ -112,9 +114,9 @@ namespace KillZombie.Models
 
         public override void Update(GameModel game)
         {
-            if (this.IsAlive())
+            if (IsAlive())
             {
-                Move(game.CurrentLevel.LevelMap.MapCells, game);
+                Move(game.CurrentLevel.LevelMap.MapCells);
                 Shoot(game);
                 Coin.Update(Rectangle, game.CurrentLevel.LevelMap.MapCells);
             }

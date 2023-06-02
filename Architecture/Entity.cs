@@ -7,9 +7,7 @@ namespace KillZombie.Architecture
     {
         protected Texture2D image;
 
-        public Vector2 Position, Velocity;
-
-        public float Orientation;
+        public Vector2 Position;
 
         public float Speed;
 
@@ -33,16 +31,11 @@ namespace KillZombie.Architecture
             return Health > 0;
         }
 
-        public virtual void OnExpire(GameModel game)
-        {
-
-        }
-
         public abstract void Update(GameModel game);
 
         public virtual void Draw(SpriteBatch spriteBatch)
         {
-            spriteBatch.Draw(image, Position, null, Color.White, Orientation, Size / 2f, 1f, 0, 0);
+            spriteBatch.Draw(image, Position, null, Color.White, 0, Size / 2f, 1f, 0, 0);
         }
     }
 }

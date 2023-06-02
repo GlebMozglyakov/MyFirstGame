@@ -1,9 +1,8 @@
 ﻿using KillZombie.Architecture;
 using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
 using System.Collections.Generic;
-using System.Reflection;
+using System.Linq;
 
 namespace KillZombie.Models
 {
@@ -15,17 +14,17 @@ namespace KillZombie.Models
 
         private static Texture2D Zombie3Texture;
 
-        private Texture2D[] Zombies;
+        private Texture2D[] ZombiesTextures;
 
         private Texture2D CurrentTexture;
 
         public int Health { get; set; }
 
-        private int speed = 3;
+        private int speed = 2;
 
         private SpriteEffects effect;
 
-        public MoveDirection Direction { get; set; }
+        private MoveDirection direction { get; set; }
 
         private Rectangle rectangle;
 
@@ -70,65 +69,87 @@ namespace KillZombie.Models
             Zombie1Texture = Pictures.Zombie1Texture;
             Zombie2Texture = Pictures.Zombie2Texture;
             Zombie3Texture = Pictures.Zombie3Texture;
-            Zombies = new Texture2D[3] { Zombie1Texture, Zombie2Texture, Zombie3Texture };
-            CurrentTexture = Zombies[zombiesIndex];
+            ZombiesTextures = new Texture2D[3] { Zombie1Texture, Zombie2Texture, Zombie3Texture };
+            CurrentTexture = ZombiesTextures[zombiesIndex];
             Health = 100;
             Rectangle = new Rectangle(position.X, position.Y, 60, 105);
         }
 
-        public List<Pointt> GetPath(Player player, int[,] map)
+        private List<Point> GetPath(Player player, GameModel game)
         {
-             return ShortestPath.FindPath(map, new Pointt(X / 32, Y / 32), new Pointt((int)player.Position.X / 32, (int)player.Position.Y / 32));
+            var map = game.CurrentLevel.LevelMap.MapStructure;
+            var zombiePosition = new Point(X / 32, Y / 32);
+            var playerPosition = new Point((int)player.Position.X / 32, (int)player.Position.Y / 32);
+            return ShortestPath.FindPath(map, zombiePosition, playerPosition);
         }
 
-        public void Move(Player player, int[,] map)
+        private void Move(GameModel game)
         {
-            var zombiesSteps = GetSteps(player, map);
-            var index = new Pointt(X / 32, Y / 32);
-            var step = new Pointt();
+            var zombiesDirections = GetSteps(game.CurrentLevel.Player, game);
+            var index = new Point(X / 32, Y / 32);
+            var step = new Point();
 
-            if (zombiesSteps.TryGetValue(index, out step))
+            if (zombiesDirections.TryGetValue(index, out step))
             {
-                X += step.X * 2;
-                Y += step.Y * 2;
+                X += step.X * speed;
+                Y += step.Y * speed;
             }
         }
 
-        private Dictionary<Pointt, Pointt> GetSteps(Player player, int[,] map)
+        private Dictionary<Point, Point> GetSteps(Player player, GameModel game)
         {
-            var path = GetPath(player, map); 
-            var dict = new Dictionary<Pointt, Pointt>();
-            if (path == null)
-                return dict;
+            var path = GetPath(player, game); 
+            var zombiesDirections = new Dictionary<Point, Point>();
+            if (path == null) 
+                return zombiesDirections;
 
             for (int i = 0; i < path.Count - 1; i++)
             {
                 var fromPoint = path[i];
                 var toPoint = path[i + 1];
-                var dirX = 0;
-                var dirY = 0;
+                var directionX = 0;
+                var directionY = 0;
 
-                if (toPoint.X - fromPoint.X == 1)
+                switch (toPoint.X - fromPoint.X)
                 {
-                    dirX = 1;
-                    Direction = MoveDirection.Right;
+                    case 1:
+                        directionX = 1;
+                        direction = MoveDirection.Right;
+                        break;
+                    case -1:
+                        directionX = -1;
+                        direction = MoveDirection.Left;
+                        break;
                 }
-                else if (toPoint.X - fromPoint.X == -1)
+
+                switch (toPoint.Y - fromPoint.Y)
                 {
-                    dirX = -1;
-                    Direction = MoveDirection.Left;
+                    case 1:
+                        directionY = 1;
+                        direction = MoveDirection.Up;
+                        break;
+                    case -1:
+                        directionY = -1;
+                        direction = MoveDirection.Down;
+                        break;
                 }
-                if (toPoint.Y -  fromPoint.Y == 1)
-                    dirY = 1;
-                else if (toPoint.Y - fromPoint.Y == -1)
-                    dirY = -1;
-                dict[fromPoint] = new Pointt(dirX, dirY);
+
+                zombiesDirections[fromPoint] = new Point(directionX, directionY);
             }
 
-            return dict;
+            return zombiesDirections;
         }
 
-        public void EatPlayer(Player player)
+        private bool AreOtherZombiesIntersects(Zombie[] zombies)
+        {
+            zombies = zombies.Where(z => z != this).ToArray();
+            foreach (var zombie in zombies)
+                if (this.Rectangle.Intersects(zombie.Rectangle))
+                    return true;
+            return false;
+        }
+
+        private void EatPlayer(Player player)
         {
             if (this.rectangle.Intersects(player.Rectangle))
             {
@@ -150,13 +171,13 @@ namespace KillZombie.Models
 
         public void Update(GameModel game)
         {
-            Move(game.CurrentLevel.Player, game.CurrentLevel.LevelMap.MapStructure);
+            Move(game);
             EatPlayer(game.CurrentLevel.Player);
         }
 
         public void Draw(SpriteBatch spriteBatch)
         {
-            switch (Direction)
+            switch (direction)
             {
                 case MoveDirection.Left:
                     effect = SpriteEffects.None;
