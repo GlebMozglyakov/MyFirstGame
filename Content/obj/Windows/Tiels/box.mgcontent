@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <PipelineBuildEvent xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
-  <SourceFile>C:/Users/User/Desktop/KillZombie/Content/bulletVertical.png</SourceFile>
-  <SourceTime>2023-05-23T13:53:15.3607898+05:00</SourceTime>
-  <DestFile>C:/Users/User/Desktop/KillZombie/Content/bin/Windows/bulletVertical.xnb</DestFile>
-  <DestTime>2023-05-28T12:24:23.9706414+05:00</DestTime>
+  <SourceFile>C:/Users/User/Desktop/KillZombie/Content/Tiels/box.png</SourceFile>
+  <SourceTime>2023-05-23T13:53:15.2983147+05:00</SourceTime>
+  <DestFile>C:/Users/User/Desktop/KillZombie/Content/bin/Windows/Tiels/box.xnb</DestFile>
+  <DestTime>2023-06-02T13:26:29.4362514+05:00</DestTime>
   <Importer>TextureImporter</Importer>
   <ImporterTime>2022-07-26T16:44:56+05:00</ImporterTime>
   <Processor>TextureProcessor</Processor>
