@@ -20,11 +20,11 @@ namespace KillZombie.Models
         public Player()
         {
             image = Pictures.PlayerTexture;
-            Speed = 5;
+            Speed = 7;
             weapon = new Weapon();
             Health = 100;
             Position = new Vector2(1000, 100);
-            Coin = new Coin(new GetPosition(840, 240));
+            Coin = new Coin(new GetPosition(850, 240));
         }
 
         public void ZombieBite()

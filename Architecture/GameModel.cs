@@ -37,7 +37,8 @@ namespace KillZombie.Architecture
             Levels.Add(new Level(2 , new Vector2(1400, 150), GetLevelsInfo.MapStructureForLevel2, GetLevelsInfo.SpawnZombiesPositionsForLevel2));
             Levels.Add(new Level(3, new Vector2(1400, 150), GetLevelsInfo.MapStructureForLevel3, GetLevelsInfo.SpawnZombiesPositionsForLevel3));
             Levels.Add(new Level(4, new Vector2(960, 450), GetLevelsInfo.MapStructureForLevel4, GetLevelsInfo.SpawnZombiesPositionsForLevel4));
-            Levels.Add(new Level(5, new Vector2(1400, 500), GetLevelsInfo.MapStructureForLevel5, new Point[] {new Point (100, 500)}));
+            Levels.Add(new Level(5, new Vector2(1050, 500), GetLevelsInfo.MapStructureForLevel5, GetLevelsInfo.SpawnZombiesPositionsForLevel5));
+
             mainFont = Fonts.MainFont;
             _menu = new Menu(this);
         }

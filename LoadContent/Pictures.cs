@@ -43,8 +43,8 @@ namespace KillZombie.Architecture
 
         public static void LoadPictures(ContentManager content)
         {
-            PlayerTexture = content.Load<Texture2D>("chel");
-            CoinTexture = content.Load<Texture2D>("coin");
+            PlayerTexture = content.Load<Texture2D>(Path.Combine("Models", "chel"));
+            CoinTexture = content.Load<Texture2D>(Path.Combine("Models", "coin"));
             BrickCellTexture = content.Load<Texture2D>("brick");
             BoxCellTexture = content.Load<Texture2D>("box");
             Green1CellTexture = content.Load<Texture2D>("green1");
