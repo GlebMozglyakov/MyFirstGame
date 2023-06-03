@@ -4,8 +4,6 @@ C:\Users\User\Desktop\KillZombie\bin\Debug\net6.0-windows\Content\bulletHorizont
 C:\Users\User\Desktop\KillZombie\bin\Debug\net6.0-windows\Content\bulletVertical.xnb
 C:\Users\User\Desktop\KillZombie\bin\Debug\net6.0-windows\Content\Bullet\bulletHorizontal.xnb
 C:\Users\User\Desktop\KillZombie\bin\Debug\net6.0-windows\Content\Bullet\bulletVertical.xnb
-C:\Users\User\Desktop\KillZombie\bin\Debug\net6.0-windows\Content\chel.xnb
-C:\Users\User\Desktop\KillZombie\bin\Debug\net6.0-windows\Content\coin.xnb
 C:\Users\User\Desktop\KillZombie\bin\Debug\net6.0-windows\Content\Fonts\mainfont.xnb
 C:\Users\User\Desktop\KillZombie\bin\Debug\net6.0-windows\Content\Fonts\myfont.xnb
 C:\Users\User\Desktop\KillZombie\bin\Debug\net6.0-windows\Content\green1.xnb
@@ -84,3 +82,5 @@ C:\Users\User\Desktop\KillZombie\bin\Debug\net6.0-windows\Content\Backgrounds\ba
 C:\Users\User\Desktop\KillZombie\bin\Debug\net6.0-windows\Content\Backgrounds\final.xnb
 C:\Users\User\Desktop\KillZombie\bin\Debug\net6.0-windows\Content\Backgrounds\finalBackground.xnb
 C:\Users\User\Desktop\KillZombie\bin\Debug\net6.0-windows\Content\Backgrounds\tutorial.xnb
+C:\Users\User\Desktop\KillZombie\bin\Debug\net6.0-windows\Content\Models\chel.xnb
+C:\Users\User\Desktop\KillZombie\bin\Debug\net6.0-windows\Content\Models\coin.xnb
